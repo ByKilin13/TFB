@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings  #sirve para relacionar reservas con el usuario
+from django.core.exceptions import ValidationError #importante para mensajes de errores
 
 
 
@@ -38,4 +39,26 @@ class Reserva(models.Model):
     )
     def __str__(self):
         return f"{self.espacio.nombre} - {self.fecha}"
+
+    def clean(self): #clean valida el objeto antes de enviar
+        if self.hora_fin <= self.hora_inicio: #mensaje error de hora
+            raise ValidationError ("La hora final debe ser posterior a la inicial")
+
+        reservas_colapsadas = Reserva.objects.filter( #comprueba con todas las reservas si coincide la fecha 
+            espacio = self.espacio,
+            fecha = self.fecha,
+            estado = "activa",
+            hora_inicio__lt = self.hora_fin,
+            hora_fin__gt = self.hora_inicio
+        )
+        if self.pk: #esto es para que django no lo compruebe con el mismo objeto que intentamos cambiar, solo afecta a modificaciones
+            reservas_colapsadas = reservas_colapsadas.exclude(pk = self.pk)
+
+        if reservas_colapsadas.exists(): #si existe esto es que hay una reserva que colapsa y da error
+            raise ValidationError(
+                "El espacio ya esta reservado durante ese horario"
+            )
+        
+
+    
 
