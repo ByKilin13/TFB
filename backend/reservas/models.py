@@ -48,8 +48,8 @@ class Reserva(models.Model):
             espacio = self.espacio,
             fecha = self.fecha,
             estado = "activa",
-            hora_inicio__lt = self.hora_fin,
-            hora_fin__gt = self.hora_inicio
+            hora_inicio__lt = self.hora_fin, #hora inicio es menor que la hora final del objeto ya guardado
+            hora_fin__gt = self.hora_inicio #hora final es mayor que la hora inicial del objeto ya guardado
         )
         if self.pk: #esto es para que django no lo compruebe con el mismo objeto que intentamos cambiar, solo afecta a modificaciones
             reservas_colapsadas = reservas_colapsadas.exclude(pk = self.pk)
@@ -58,6 +58,10 @@ class Reserva(models.Model):
             raise ValidationError(
                 "El espacio ya esta reservado durante ese horario"
             )
+
+        if not self.espacio.activo:
+            raise ValidationError("No se puede reservar este espacio, está inactivo")  
+    
         
 
     
