@@ -48,8 +48,8 @@ class Reserva(models.Model):
             espacio = self.espacio,
             fecha = self.fecha,
             estado = "activa",
-            hora_inicio__lt = self.hora_fin, #hora inicio es menor que la hora final del objeto ya guardado
-            hora_fin__gt = self.hora_inicio #hora final es mayor que la hora inicial del objeto ya guardado
+            hora_inicio__lt = self.hora_fin, #hora inicio del objeto ya guardado es menor que la hora final de la reserva por hacer
+            hora_fin__gt = self.hora_inicio #hora final del objeto es mayor que la hora inicio de la reserva por hacer
         )
         if self.pk: #esto es para que django no lo compruebe con el mismo objeto que intentamos cambiar, solo afecta a modificaciones
             reservas_colapsadas = reservas_colapsadas.exclude(pk = self.pk)
