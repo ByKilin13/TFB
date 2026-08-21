@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 from .models import Espacio, Reserva
-from .serializers import EspacioSerializer, ReservaSerializer
+from .serializers import EspacioSerializer, ReservaSerializer, RegistroSerializer
 
 class ListaEspaciosView(generics.ListAPIView):
     serializer_class = EspacioSerializer
@@ -37,6 +38,24 @@ class CancelarReservaView(APIView):
         return Response(
             {"mensaje":"Reserva cancelada correctamente"},
             status = status.HTTP_200_OK
+        )
+
+class RegistroView(generics.CreateAPIView):
+    serializer_class = RegistroSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data = request.data)
+        serializer.is_valid(raise_exception = True)
+        usuario = serializer.save()
+        token, creado = Token.objects.get_or_create(user = usuario)
+        return Response(
+            {
+                "mensaje": "Usuario registrado correctamente",
+                "username": usuario.username,
+                "token": token.key
+            },
+            status= status.HTTP_201_CREATED
         )
 
 # Create your views here.
