@@ -1,43 +1,86 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {Route,Routes,useNavigate} from "react-router-dom";
+import Espacios from "./pages/Espacios";
+import Inicio from "./pages/Inicio";
+import Login from "./pages/Login";
+import Reservas from "./pages/Reservas";
+import Registro from "./pages/Registro";
+import Navegacion from "./components/Navegacion";
+import NuevaReserva from "./pages/NuevaReserva";
 import "./App.css";
 
-function App() {
-    const [espacios, setEspacios] = useState([]);
 
-    useEffect(() => {
-        fetch("http://127.0.0.1:8000/api/espacios/")
-            .then((respuesta) => respuesta.json())
-            .then((datos) => {
-                setEspacios(datos);
-            })
-            .catch((error) => {
-                console.error(
-                    "Error al consultar los espacios:",
-                    error
-                );
-            });
-    }, []);
+function App() {
+    const [autenticado, setAutenticado] = useState(
+        Boolean(localStorage.getItem("token"))
+    );
+
+    const navigate = useNavigate();
+
+    function guardarSesion() {
+        setAutenticado(true);
+    }
+
+    function cerrarSesion() {
+        localStorage.removeItem("token");
+        setAutenticado(false);
+        navigate("/");
+    }
 
     return (
-        <main>
-            <h1>Reserva de espacios</h1>
+        <>
+           <Navegacion
+                autenticado={autenticado}
+                cerrarSesion={cerrarSesion}
+            /> 
 
-            <h2>Espacios disponibles</h2>
+            <Routes>
+                <Route
+                    path="/"
+                    element={<Inicio />}
+                />
 
-            {espacios.length === 0 ? (
-                <p>No hay espacios disponibles.</p>
-            ) : (
-                <ul>
-                    {espacios.map((espacio) => (
-                        <li key={espacio.id}>
-                            <strong>{espacio.nombre}</strong>
-                            {" - "}
-                            {espacio.localizacion}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </main>
+                <Route
+                    path="/espacios"
+                    element={<Espacios />}
+                />
+
+                <Route
+                    path="/reservas"
+                    element={<Reservas />}
+                />
+
+                <Route
+                    path="/login"
+                    element={
+                        <Login onLogin={guardarSesion} />
+                    }
+                />
+
+                <Route
+                    path="/registro"
+                    element={<Registro onRegistro={guardarSesion} /> }
+                />
+
+                <Route
+                    path="/reservar/:espacioId"
+                    element={<NuevaReserva />}
+                    />
+
+                <Route
+                    path="*"
+                    element={
+                        <main>
+                            <h1>Página no encontrada</h1>
+
+                            <p>
+                                Esta dirección no existe
+                            </p>
+                        </main>
+                    }
+                />
+            </Routes>
+        </>
     );
 }
 

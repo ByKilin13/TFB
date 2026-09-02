@@ -6,7 +6,8 @@ urlpatterns = [
     path(
         "espacios/",
         ListaEspaciosView.as_view(),
-        name="lista-espacios"),
+        name="lista-espacios"
+    ),
 
     path(
         "reservas/",

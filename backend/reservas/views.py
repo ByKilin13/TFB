@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -18,7 +18,7 @@ class ListaCrearReservasView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Reserva.objects.filter(usuario = self.request.user).order_by("fecha","hora_inicio")
+        return Reserva.objects.filter(usuario = self.request.user).order_by("-fecha","-hora_inicio")
 
     def perform_create(self, serliazer):
         serliazer.save(usuario = self.request.user)

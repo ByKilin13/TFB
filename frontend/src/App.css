@@ -1,19 +1,590 @@
-* {
-    box-sizing: border-box;
+/* Colores principales */
+
+:root {
+    --azul: #174f8f;
+    --azul-oscuro: #123f73;
+    --azul-claro: #edf4fb;
+    --borde: #d9e0e7;
+    --blanco: #ffffff;
+    --texto: #1f2937;
+    --rojo: #b42318;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    color: #1f2937;
+
+/* Navegación */
+
+
+.cabecera {
+    background-color: var(--azul);
+    color: var(--blanco);
 }
 
-main {
+.contenedor-navegacion {
     width: min(100% - 32px, 1000px);
-    margin: 40px auto;
+    min-height: 64px;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-h1 {
-    color: #1858a1;
+.logo,
+
+.logo {
+    color: var(--blanco);
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
 }
+
+.nav-animada {
+    position: relative;
+    width: min(100%, 500px);
+    height: 60px;
+}
+
+.container-nav {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+
+    padding: 4px;
+    border-radius: 8px;
+    background-color: var(--azul);
+}
+
+.outline-nav {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.rect-nav {
+    fill: transparent;
+    stroke: #ffffff;
+    stroke-width: 2;
+
+    stroke-dashoffset: 5;
+    stroke-dasharray: 0 0 10 40 10 40;
+
+    transition: 0.5s;
+}
+
+.btn-nav {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 48px;
+    padding: 8px 10px;
+
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-nav:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+    text-decoration: none;
+}
+
+.btn-nav:focus-visible {
+    outline: 3px solid #93b9e2;
+    outline-offset: -2px;
+}
+
+/* Movimiento del contorno según la opción */
+
+.btn-nav:nth-child(1):hover ~ .outline-nav .rect-nav {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 0 0 8 116 8 368;
+}
+
+.btn-nav:nth-child(2):hover ~ .outline-nav .rect-nav {
+    stroke-dashoffset: -124;
+    stroke-dasharray: 0 0 8 116 8 368;
+}
+
+.btn-nav:nth-child(3):hover ~ .outline-nav .rect-nav {
+    stroke-dashoffset: -248;
+    stroke-dasharray: 0 0 8 116 8 368;
+}
+
+.btn-nav:nth-child(4):hover ~ .outline-nav .rect-nav {
+    stroke-dashoffset: -372;
+    stroke-dasharray: 0 0 8 116 8 368;
+}
+
+.container-nav:hover .rect-nav {
+    transition: 0.5s;
+}
+
+
+/* Tarjetas de espacios y reservas */
+
+.lista-espacios,
+.lista-reservas,
+.tarjetas-inicio {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta-espacio,
+.tarjeta-reserva,
+.tarjeta-inicio {
+    padding: 20px;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    background-color: var(--blanco);
+    box-shadow: 0 3px 10px
+        rgba(23, 79, 143, 0.08);
+}
+
+.tarjeta-espacio h2,
+.tarjeta-reserva h2,
+.tarjeta-inicio h3 {
+    margin-top: 0;
+    color: var(--azul);
+}
+
+
+/* Formularios */
+
+.contenedor-formulario {
+    max-width: 480px;
+    margin: auto;
+    padding: 24px;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    background-color: var(--blanco);
+    box-shadow: 0 4px 14px
+        rgba(23, 79, 143, 0.08);
+}
+
+.contenedor-formulario form {
+    display: grid;
+    gap: 16px;
+}
+
+.contenedor-formulario label {
+    font-weight: 700;
+}
+
+.contenedor-formulario input,
+.contenedor-formulario select,
+.contenedor-formulario textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #aeb9c4;
+    border-radius: 6px;
+    background-color: var(--blanco);
+    color: var(--texto);
+}
+
+.contenedor-formulario input:focus,
+.contenedor-formulario select:focus,
+.contenedor-formulario textarea:focus {
+    border-color: var(--azul);
+    outline: 3px solid #dbeafe;
+}
+
+/* Botones normales de formularios */
+.contenedor-formulario button:not(.animated-button) {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--azul);
+    color: var(--blanco);
+    font-weight: 700;
+}
+
+.contenedor-formulario
+button:not(.animated-button):hover {
+    background-color: var(--azul-oscuro);
+}
+
+.contenedor-formulario button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+/* Mensajes */
+
+.mensaje-error,
+.mensaje-correcto,
+.mensaje-formulario {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 6px;
+}
+
+.mensaje-error {
+    border: 1px solid #f1a7a2;
+    background-color: #fee2e2;
+    color: #9b1c1c;
+}
+
+.mensaje-correcto,
+.mensaje-formulario {
+    border: 1px solid #93b9e2;
+    background-color: var(--azul-claro);
+    color: var(--azul-oscuro);
+}
+
+
+/* Estado de las reservas */
+
+.estado-activa,
+.estado-cancelada {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+.estado-activa {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.estado-cancelada {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+
+/* Filtros */
+
+.filtros-reservas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+
+/* Botón animado común */
+
+.animated-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 140px;
+    padding: 12px 28px;
+
+    border: 3px solid transparent;
+    border-radius: 100px;
+
+    background-color: transparent;
+    color: var(--azul);
+    box-shadow: 0 0 0 2px var(--azul);
+
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+
+    overflow: hidden;
+    cursor: pointer;
+
+    transition:
+        color 0.6s,
+        border-radius 0.6s,
+        box-shadow 0.6s,
+        transform 0.2s;
+}
+
+.animated-button .text {
+    position: relative;
+    z-index: 2;
+}
+
+.animated-button .circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+    background-color: var(--azul);
+    opacity: 0;
+
+    transform: translate(-50%, -50%);
+
+    transition:
+        width 0.7s,
+        height 0.7s,
+        opacity 0.4s;
+}
+
+.animated-button:hover {
+    border-radius: 12px;
+    color: var(--blanco);
+    box-shadow: 0 0 0 10px transparent;
+}
+
+.animated-button:hover .circle {
+    width: 500px;
+    height: 500px;
+    opacity: 1;
+}
+
+.animated-button:active {
+    transform: scale(0.96);
+}
+
+.animated-button:focus-visible,
+.navegacion a:focus-visible,
+.boton-cerrar-sesion:focus-visible {
+    outline: 3px solid #93b9e2;
+    outline-offset: 4px;
+}
+
+.animated-button.activo {
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+
+.animated-button.activo .circle {
+    display: none;
+}
+
+.animated-button.activo:hover {
+    background-color: var(--azul-oscuro);
+}
+
+.animated-button:disabled {
+    background-color: #e2e8f0;
+    color: #64748b;
+    box-shadow: 0 0 0 2px #94a3b8;
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+.animated-button:disabled .circle {
+    display: none;
+}
+
+
+/* Diferencias según la ubicación */
+
+.acciones-inicio .animated-button {
+    min-width: 190px;
+}
+
+.contenedor-formulario .animated-button {
+    width: 100%;
+    min-height: 48px;
+}
+
+.tarjeta-espacio .animated-button {
+    width: fit-content;
+    margin-top: 16px;
+}
+
+
+/* Botón de reserva sin animación */
+
+.boton-reservar {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    background-color: var(--azul);
+    color: var(--blanco);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.boton-reservar:hover {
+    background-color: var(--azul-oscuro);
+}
+
+
+/* Cancelación */
+
+.boton-cancelar {
+    margin-top: 12px;
+    padding: 10px 16px;
+    border: 2px solid var(--rojo);
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--rojo);
+    font-weight: 700;
+}
+
+.boton-cancelar:hover {
+    background-color: var(--rojo);
+    color: var(--blanco);
+}
+
+.boton-cancelar:active {
+    transform: scale(0.97);
+}
+
+
+/* Página de inicio */
+
+.pagina-inicio {
+    width: min(100% - 32px, 1000px);
+    margin: 36px auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.presentacion-inicio {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 48px 28px;
+    border-radius: 14px;
+    background-color: var(--blanco);
+    text-align: center;
+    box-shadow: 0 4px 16px
+        rgba(23, 79, 143, 0.1);
+}
+
+.logo-universidad {
+    display: block;
+    width: min(260px, 80%);
+    max-height: 100px;
+    margin: 0 auto 24px;
+    object-fit: contain;
+}
+
+.presentacion-inicio h1 {
+    margin: 0 0 12px;
+    font-size: 2.4rem;
+}
+
+.subtitulo-inicio {
+    max-width: 650px;
+    margin: 0 auto 28px;
+    color: #475569;
+    font-size: 1.15rem;
+}
+
+.acciones-inicio {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.boton-inicio {
+    display: inline-block;
+    padding: 11px 20px;
+    border: 2px solid var(--azul);
+    border-radius: 7px;
+    color: var(--azul);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.boton-inicio.principal {
+    background-color: var(--azul);
+    color: var(--blanco);
+}
+
+.boton-inicio:hover {
+    background-color: var(--azul-claro);
+}
+
+.boton-inicio.principal:hover {
+    background-color: var(--azul-oscuro);
+}
+
+.funciones-inicio,
+.informacion-academica {
+    margin-top: 48px;
+}
+
+.funciones-inicio h2,
+.informacion-academica h2 {
+    color: var(--azul);
+    text-align: center;
+}
+
+.tarjetas-inicio {
+    margin-top: 24px;
+}
+
+.informacion-academica {
+    padding: 26px;
+    border-top: 3px solid var(--azul);
+    background-color: var(--azul-claro);
+    text-align: center;
+}
+
+.informacion-academica p {
+    margin: 8px 0;
+}
+
+
+/* Adaptación a dispositivos pequeños */
+
+@media (max-width: 650px) {
+    .contenedor-navegacion {
+        padding: 14px 0;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navegacion {
+        width: 100%;
+        gap: 12px;
+    }
+
+    .filtros-reservas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filtros-reservas .animated-button {
+        width: 100%;
+        min-width: 0;
+        padding: 11px 15px;
+    }
+
+    .presentacion-inicio {
+        padding: 32px 18px;
+    }
+
+    .presentacion-inicio h1 {
+        font-size: 2rem;
+    }
+}
+

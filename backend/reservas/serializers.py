@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from .models import Espacio, Reserva
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 class RegistroSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
     password = serializers.CharField(
         write_only = True,
         min_length = 6
@@ -15,6 +17,16 @@ class RegistroSerializer(serializers.ModelSerializer):
             "email",
             "password"
         ]
+
+    def validate_username(self, username):
+        if User.objects.filter(username__iexact=username).exists():
+            raise serializers.ValidationError("Ya existe una cuenta con este usuario")
+        return username
+
+    def validate_email(self, email):
+        if User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError("Ya existe una cuenta con este email")
+        return email
 
     def create(self, validated_data):
         usuario = User.objects.create_user(
@@ -67,6 +79,14 @@ class ReservaSerializer(serializers.ModelSerializer):
         ]
     def create(self, validated_data): #crear reservas
         reserva = Reserva(**validated_data) #los asteriscos son para elegir todos los datos
-        reserva.full_clean() #ejecuta las validaciones del modelo
-        reserva.save()
+
+        try:
+            reserva.full_clean() #ejecuta las validaciones del modelo
+            reserva.save()
+
+        except ValidationError as error:
+            raise serializers.ValidationError({
+            "error": error.messages
+        })
+        
         return reserva
